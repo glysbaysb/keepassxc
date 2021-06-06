@@ -890,7 +890,7 @@ bool Database::hasNonDataChanges() const
 void Database::markAsModified()
 {
     m_modified = true;
-    if (!m_modifiedTimer.isActive()) {
+    if (modifiedSignalEnabled() && !m_modifiedTimer.isActive()) {
         // Small time delay prevents numerous consecutive saves due to repeated signals
         startModifiedTimer();
     }
@@ -957,11 +957,13 @@ bool Database::changeKdf(const QSharedPointer<Kdf>& kdf)
     return true;
 }
 
+// Prevent warning about QTimer not allowed to be started/stopped from other thread
 void Database::startModifiedTimer()
 {
     QMetaObject::invokeMethod(&m_modifiedTimer, "start", Q_ARG(int, 150));
 }
 
+// Prevent warning about QTimer not allowed to be started/stopped from other thread
 void Database::stopModifiedTimer()
 {
     QMetaObject::invokeMethod(&m_modifiedTimer, "stop");
