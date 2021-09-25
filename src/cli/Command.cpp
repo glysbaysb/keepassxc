@@ -43,7 +43,6 @@
 #include "UnlockSSHKey.h"
 #endif
 
-
 #include <QCommandLineParser>
 #include <QFileInfo>
 #include <QRegularExpression>
@@ -189,7 +188,6 @@ namespace Commands
 #ifdef WITH_XC_SSHAGENT
         s_commands.insert(QStringLiteral("unlock-ssh-key"), QSharedPointer<Command>(new UnlockSSHKey()));
 #endif
-
 
         if (interactive) {
             s_commands.insert(QStringLiteral("exit"), QSharedPointer<Command>(new Exit("exit")));

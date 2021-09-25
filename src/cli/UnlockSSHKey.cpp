@@ -21,24 +21,27 @@
 #include "cli/TextStream.h"
 #include "core/Database.h"
 #include "core/Entry.h"
-#include "core/Group.h"
 #include "core/Global.h"
-#include "sshagent/SSHAgent.h"
+#include "core/Group.h"
 #include "sshagent/KeeAgentSettings.h"
+#include "sshagent/SSHAgent.h"
 
 #include <QCommandLineParser>
 #include <QLocale>
 
-const QCommandLineOption UnlockSSHKey::AllOption = QCommandLineOption(QStringList() << "a"
-                                                                             << "all",
-                                                               QObject::tr("Unlock all the SSH keys in the database."));
+const QCommandLineOption UnlockSSHKey::AllOption =
+    QCommandLineOption(QStringList() << "a"
+                                     << "all",
+                       QObject::tr("Unlock all the SSH keys in the database."));
 
 UnlockSSHKey::UnlockSSHKey()
 {
     name = QString("unlock-ssh-key");
-    description = QObject::tr("Unlock one of multiple ssh keys from the database and add them to the running SSH agent.");
+    description =
+        QObject::tr("Unlock one of multiple ssh keys from the database and add them to the running SSH agent.");
     options.append(UnlockSSHKey::AllOption);
-    optionalArguments.append({QString("entry"), QObject::tr("Name of the entry with an SSH key to unlock."), QString("")});
+    optionalArguments.append(
+        {QString("entry"), QObject::tr("Name of the entry with an SSH key to unlock."), QString("")});
 }
 
 int UnlockSSHKey::executeWithDatabase(QSharedPointer<Database> database, QSharedPointer<QCommandLineParser> parser)
@@ -71,15 +74,16 @@ int UnlockSSHKey::executeWithDatabase(QSharedPointer<Database> database, QShared
         }
         // @hifi: Should I check for the KeeAgent settings from the CLI?
         // if (!KeeAgentSettings::inEntryAttachments(currentEntry->attachments())) {
-            // return EXIT_FAILURE;
+        // return EXIT_FAILURE;
         // }
 
         SSHAgent::instance()->addIdentity(key, settings, database->uuid());
         out << QObject::tr("Successfully added SSH key from entry %1 to the SSH agent.").arg(entryPath) << endl;
         return EXIT_SUCCESS;
     } else {
-        err << QObject::tr("Error while adding  SSH key from entry %1 to the SSH agent: %2.").arg(entryPath, key.errorString()) << endl;
+        err << QObject::tr("Error while adding  SSH key from entry %1 to the SSH agent: %2.")
+                   .arg(entryPath, key.errorString())
+            << endl;
         return EXIT_FAILURE;
     }
-
 }
