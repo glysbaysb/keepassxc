@@ -39,6 +39,10 @@
 #include "Search.h"
 #include "Show.h"
 #include "Utils.h"
+#ifdef WITH_XC_SSHAGENT
+#include "UnlockSSHKey.h"
+#endif
+
 
 #include <QCommandLineParser>
 #include <QFileInfo>
@@ -182,6 +186,10 @@ namespace Commands
         s_commands.insert(QStringLiteral("rmdir"), QSharedPointer<Command>(new RemoveGroup()));
         s_commands.insert(QStringLiteral("search"), QSharedPointer<Command>(new Search()));
         s_commands.insert(QStringLiteral("show"), QSharedPointer<Command>(new Show()));
+#ifdef WITH_XC_SSHAGENT
+        s_commands.insert(QStringLiteral("unlock-ssh-key"), QSharedPointer<Command>(new UnlockSSHKey()));
+#endif
+
 
         if (interactive) {
             s_commands.insert(QStringLiteral("exit"), QSharedPointer<Command>(new Exit("exit")));
